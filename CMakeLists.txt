@@ -7,5 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(Model)
 add_subdirectory(PngReader)
 
+add_subdirectory(Network)
+
 #定义依赖关系 编译顺序
 add_dependencies(PngReader Model)
