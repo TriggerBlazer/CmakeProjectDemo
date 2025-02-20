@@ -10,7 +10,7 @@
 
 int main()
 {
-	std::ifstream file("Request.log"); // ´ò¿ªÎÄ¼ş
+	std::ifstream file("Request.log"); // æ‰“å¼€æ–‡ä»¶
 	if (!file.is_open()) {
 		std::cerr << "Failed to open the file." << std::endl;
 		return 1;
@@ -18,21 +18,22 @@ int main()
 
 	std::vector<std::string> commandList;
 	std::string line;
-	while (std::getline(file, line)) { // ÖğĞĞ¶ÁÈ¡
+	while (std::getline(file, line)) { // é€è¡Œè¯»å–
 		commandList.push_back(std::format("curl {}", line));
 	}
 
 
-	// Ëæ»úÊıÉú³ÉÆ÷
+	// éšæœºæ•°ç”Ÿæˆå™¨
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	// Ëæ»úÊ±¼ä¼ä¸ô
+	// éšæœºæ—¶é—´é—´éš”
 	std::uniform_int_distribution<> timeDistrib(1, 10);
-	// Ëæ»úÇëÇóindex
+	// éšæœºè¯·æ±‚index
 	std::uniform_int_distribution<> indexDistrib(0, commandList.size() - 1);
 
+	int cycleTimes = 0;
 
-	// Ä£ÄâµÄ²Ù×÷
+	// æ¨¡æ‹Ÿçš„æ“ä½œ
 	auto operation = [](const std::string& commondLine) {
 		std::cout << commondLine << std::endl;
 		system(commondLine.c_str());
@@ -41,8 +42,15 @@ int main()
 	while (true) {
 		operation(commandList[indexDistrib(gen)]);
 
-		// µÈ´ıËæ»úÊ±¼ä¼ä¸ô
+		// ç­‰å¾…éšæœºæ—¶é—´é—´éš”
 		std::this_thread::sleep_for(std::chrono::seconds(timeDistrib(gen)));
+
+		cycleTimes++;
+		if (cycleTimes > 20000) 
+		{
+			system("cls");
+			cycleTimes = 0;
+		}
 	}
 
 	return 0;
